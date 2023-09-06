@@ -90,10 +90,10 @@ app.post("/", function(req, res){
 
 app.get("/:customListName", function(req,res){
   const customListName = _.capitalize(req.params.customListName); 
-  console.log(customListName);
+  console.log("custon name is : " + customListName);
   List.findOne({name : customListName}).then(foundList =>{
     if(foundList){
-      console.log("exist");
+      
       res.render("list", {listTitle: foundList.name, newListItems:foundList.items});
     }
     else if(customListName === "About"){
@@ -119,19 +119,19 @@ app.post("/delete" , (req ,res)=>{
   //delete from items 
   if(listName === "Today"){
     Item.findByIdAndRemove({ _id:itemId }).then(result =>{
-      console.log(result)
+      console.log("delete item result : "+result)
     }).catch(err =>{
-      console.log(err);
+      console.log( "delete item err :"+err);
     });
     res.redirect("/");
 
   }else{
     //delete item from an array in side the list coll
     List.findOneAndUpdate({name : listName} ,{$pull:{items : {_id : itemId}}}).then(result =>{
-      console.log(result);
+      console.log("delete list result"+result);
       res.redirect("/"+listName);
     }).catch(err=>{
-      console.log(err);
+      console.log("delete list err"+err);
     });
   }
 
